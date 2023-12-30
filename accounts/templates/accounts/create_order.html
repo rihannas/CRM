@@ -5,7 +5,11 @@
 <!-- since there's no a url provided the form is used for both update and create, this is decided by the view -->
 <form action="" method="post">
     {%csrf_token%}
-    {{form}}
+    {%for form in formSet%}
+        {{formSet.management_form}}
+        {{form}}
+        <hr>
+    {%endfor%}
     <input type="submit" value="create">
 </form>
 
