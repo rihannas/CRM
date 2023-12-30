@@ -66,13 +66,13 @@
     <tbody>
         {% for order in orders%}
         <tr>
-            <th scope="row">1</th>
-            <th>{{order.product.name}}</th>
-            <th>{{order.product.category}}</th>
-            <th>{{order.date_created}}</th>
-            <th>{{order.status}}</th>
-            <th><a class="btn btn-primary" href="">Update</a></th>
-            <th><a class="btn btn-danger" href="">Remove</a></th>
+            <td scope="row">1</td>
+            <td>{{order.product.name}}</td>
+            <td>{{order.product.category}}</td>
+            <td>{{order.date_created}}</td>
+            <td>{{order.status}}</td>
+            <td><a class="btn btn-primary" href="{%url 'update_order' order.id%}">Update</a></td>
+            <td><a class="btn btn-danger" href="{%url 'delete_order' order.id%}">Remove</a></td>
         </tr>
         {%endfor%}
 

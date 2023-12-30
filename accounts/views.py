@@ -48,3 +48,12 @@ def update_order(request, id):
             return redirect('/')
 
     return render(request, 'accounts/create_order.html', {'form': form})
+
+
+def delete_order(request, id):
+    order = Order.objects.get(id=id)
+    if request.method == 'POST':
+        order.delete()
+        return redirect('/')
+
+    return render(request, 'accounts/delete_order.html', {'order': order})
