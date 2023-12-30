@@ -20,12 +20,12 @@
                 <div class="card-header">Header</div>
                 <div class="card-body">
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <input type="email" class="form-control" id="floatingInput" value="{{customer.email}}"  readonly>
                         <label for="floatingInput">Email address</label>
                     </div>
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword">Password</label>
+                        <input type="text" class="form-control" id="floatingPassword" value="{{customer.phone}}"  readonly>
+                        <label for="floatingPassword">Phone</label>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="card border-dark mb-3" style="max-width: 25rem;">
                 <div class="card-header">Total Orders</div>
                 <div class="card-body">
-                    <h5 class="card-title"></h5>
+                    <h5 class="card-title">{{total_orders}}</h5>
                 </div>
             </div>
         </div>
@@ -53,6 +53,7 @@
 <table class="table">
     <thead>
         <tr>
+
             <th scope="col">#</th>
             <th scope="col">Product</th>
             <th scope="col">Category</th>
@@ -63,17 +64,18 @@
         </tr>
     </thead>
     <tbody>
+        {% for order in orders%}
         <tr>
             <th scope="row">1</th>
+            <th>{{order.product.name}}</th>
+            <th>{{order.product.category}}</th>
+            <th>{{order.date_created}}</th>
+            <th>{{order.status}}</th>
+            <th><a class="btn btn-primary" href="">Update</a></th>
+            <th><a class="btn btn-danger" href="">Remove</a></th>
         </tr>
-        <tr>
-            <th scope="row">2</th>
+        {%endfor%}
 
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-
-        </tr>
     </tbody>
 </table>
 {%endblock%}
