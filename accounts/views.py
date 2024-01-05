@@ -6,28 +6,29 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
+
+from .decorators import unauthenicated_user
 from .models import *
 from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
 # Create your views here.
 
 
+@unauthenicated_user
 def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-            else:
-                messages.info(request, 'username or password is incorrect')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
 
-        return render(request, 'accounts/login.html')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.info(request, 'username or password is incorrect')
+
+    return render(request, 'accounts/login.html')
 
 
 def logout_view(request):
@@ -35,19 +36,18 @@ def logout_view(request):
     return redirect('login')
 
 
+@unauthenicated_user
 def register_view(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        form = CreateUserForm()
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                user = form.cleaned_data['username']
-                messages.success(request, f'{user} was created')
-                return redirect('/login')
-        return render(request, "accounts/registeration.html", {'form': form})
+
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data['username']
+            messages.success(request, f'{user} was created')
+            return redirect('/login')
+    return render(request, "accounts/registeration.html", {'form': form})
 
 
 @login_required(login_url='login')
