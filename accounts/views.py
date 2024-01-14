@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
-from .decorators import unauthenicated_user
+from .decorators import unauthenicated_user, allowed_users
 from .models import *
 from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
@@ -51,6 +51,7 @@ def register_view(request):
 
 
 @login_required(login_url='login')
+@allowed_users(['admin'])
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -62,12 +63,14 @@ def home(request):
 
 
 @login_required(login_url='login')
+@allowed_users(['admin'])
 def products(request):
     products = Product.objects.all()
     return render(request, 'accounts/products.html', {'products': products})
 
 
 @login_required(login_url='login')
+@allowed_users(['admin'])
 def customer(request, id):
     customer = Customer.objects.get(id=id)
     orders = customer.order_set.all()
@@ -79,6 +82,7 @@ def customer(request, id):
 
 
 @login_required(login_url='login')
+@allowed_users(['admin'])
 def create_order(request, id):
     OrderFormSet = inlineformset_factory(
         Customer, Order, fields=('product', 'status'), extra=5)
@@ -95,6 +99,7 @@ def create_order(request, id):
 
 
 @login_required(login_url='login')
+@allowed_users(['admin'])
 def update_order(request, id):
     order = Order.objects.get(id=id)
     form = OrderForm(instance=order)
@@ -108,6 +113,7 @@ def update_order(request, id):
 
 
 @login_required(login_url='login')
+@allowed_users(['admin'])
 def delete_order(request, id):
     order = Order.objects.get(id=id)
     if request.method == 'POST':
